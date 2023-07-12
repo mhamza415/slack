@@ -11,22 +11,22 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  User.init(
-    {
-      email: DataTypes.STRING,
-      name: DataTypes.STRING,
-      photo: DataTypes.STRING,
-      otp: DataTypes.STRING,
-      otp_expires: DataTypes.DATE,
-      isVerified: DataTypes.BOOLEAN,
-      role: DataTypes.STRING,
-      createdAt: DataTypes.DATE,
-      updatedAt: DataTypes.DATE,
-    },
-    {
-      sequelize,
-      modelName: "User",
-    }
-  );
+
+  User.init({
+    email: DataTypes.STRING,
+    name: DataTypes.STRING,
+    photo: DataTypes.STRING,
+    otp: DataTypes.STRING,
+    otp_expires: DataTypes.DATE,
+    isVerified: DataTypes.BOOLEAN,
+    role: DataTypes.STRING,
+    createdAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE,
+  }, {
+    sequelize,
+    modelName: 'User',
+    tableName: 'users'
+  });
+
   return User;
 };
