@@ -1,11 +1,13 @@
 const app = require("./app");
 const { notFound, errorHandler } = require('./middlewares/errorMiddleware')
 const userRoutes = require("./routes/userRoutes");
+const workSpaceRoutes = require("./routes/workspace/workspaceRoute");
 app.get("/", (req, res) => {
     res.status(200).send("server is listening...");
 })
 
 app.use("/api/user", userRoutes);
+app.use("/api/workspace", workSpaceRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
