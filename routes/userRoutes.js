@@ -6,7 +6,6 @@ const registerUser = require("../controllers/userControllers/registerUser")
 // route        http://localhost:6090/api/user/register
 // method       post
 
-
 router.route("/register").post(registerUser);
 
 module.exports = router;

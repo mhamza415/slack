@@ -3,12 +3,12 @@ const { MAIL_SETTINGS } = require("../constants/constants");
 const transporter = nodeMailer.createTransport(MAIL_SETTINGS);
 
 async function sendMail({ to, OTP }) {
-    try {
-        let info = await transporter.sendMail({
-            from: MAIL_SETTINGS.auth.user,
-            to: to, // list of receivers
-            subject: `Slack confirmation code: ${OTP}`, // Subject line
-            html: `
+  try {
+    let info = await transporter.sendMail({
+      from: MAIL_SETTINGS.auth.user,
+      to: to, // list of receivers
+      subject: `Slack confirmation code: ${OTP}`, // Subject line
+      html: `
       <div
         class="container"
         style="max-width: 90%; margin: auto; padding-top: 20px"
@@ -20,12 +20,12 @@ async function sendMail({ to, OTP }) {
         <p style="margin-top:50px;">If you didnot request this email, there is nothing to worry about — you can safely ignore it.</p>
       </div>
     `,
-        });
-        return info;
-    } catch (error) {
-        console.log(error);
-        return false;
-    }
+    });
+    return info;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
 }
 module.exports = sendMail;
 

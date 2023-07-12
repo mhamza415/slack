@@ -1,6 +1,6 @@
 
 const jwt = require("jsonwebtoken");
-
+const User = require("../models/user");
 
 const protect = async (req, res, next) => {
     let token;
@@ -17,7 +17,7 @@ const protect = async (req, res, next) => {
                 throw new Error("You are unauthorized to make this request");
             }
 
-            req.user = await User.findById(decoded.id).select("-password");
+            req.user = await User.findByPk(decoded.id).select("-password");
             next();
         } catch (error) {
             res.status(401);

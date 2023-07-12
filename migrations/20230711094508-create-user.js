@@ -1,4 +1,5 @@
 'use strict';
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -7,7 +8,7 @@ module.exports = {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
-        defaultValue: Sequelize.UUIDV4,
+        defaultValue: Sequelize.literal('uuid_generate_v4()'),
       },
       email: {
         type: Sequelize.STRING,
@@ -26,13 +27,12 @@ module.exports = {
         type: Sequelize.DATE
       },
       isVerified: {
-        type: Sequelize.BOOLEAN
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
       },
       role: {
-        type: Sequelize.STRING,
-        validate: {
-          isIn: [['isOwner', 'isAdmin', 'isRegular']]
-        }
+        type: Sequelize.ENUM('isOwner', 'isAdmin', 'isRegular'),
+        defaultValue: 'isRegular',
       },
       createdAt: {
         allowNull: false,

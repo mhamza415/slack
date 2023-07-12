@@ -20,7 +20,9 @@ module.exports = (sequelize, DataTypes) => {
     otp: DataTypes.STRING,
     otp_expires: DataTypes.DATE,
     isVerified: DataTypes.BOOLEAN,
-    role: DataTypes.STRING
+    role: DataTypes.STRING,
+    createdAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE,
   }, {
     sequelize,
     modelName: 'User',
