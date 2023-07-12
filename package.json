@@ -24,6 +24,8 @@
     "nodemon": "^3.0.1",
     "otp-generator": "^4.0.1",
     "pg": "^8.11.1",
-    "sequelize": "^6.32.1"
+    "pnpm": "^8.6.7",
+    "sequelize": "^6.32.1",
+    "validator": "^13.9.0"
   }
 }

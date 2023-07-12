@@ -35,9 +35,15 @@ dependencies:
   pg:
     specifier: ^8.11.1
     version: 8.11.1
+  pnpm:
+    specifier: ^8.6.7
+    version: 8.6.7
   sequelize:
     specifier: ^6.32.1
     version: 6.32.1(pg@8.11.1)
+  validator:
+    specifier: ^13.9.0
+    version: 13.9.0
 
 packages:
 
@@ -727,6 +733,12 @@ packages:
   /picomatch@2.3.1:
     resolution: {integrity: sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==}
     engines: {node: '>=8.6'}
+    dev: false
+
+  /pnpm@8.6.7:
+    resolution: {integrity: sha512-vRIWpD/L4phf9Bk2o/O2TDR8fFoJnpYrp2TKqTIZF/qZ2/rgL3qKXzHofHgbXsinwMoSEigz28sqk3pQ+yMEQQ==}
+    engines: {node: '>=16.14'}
+    hasBin: true
     dev: false
 
   /postgres-array@2.0.0:
