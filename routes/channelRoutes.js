@@ -5,6 +5,7 @@ const {
   createChannel,
   getWorkSpaceChannel,
   registerUserInChannel,
+  removeUserFromChannel,
 } = require("../controllers/channelControllers/createChannel");
 
 // @desc        create channel
@@ -23,6 +24,12 @@ router.route("/getWorkSpaceChannel/:id").get(protect, getWorkSpaceChannel);
 // route        http://localhost:6090/api/user/getWorkSpaceChannel
 // method       post
 
-router.route("/channels/:channelId/users/:userId").post(registerUserInChannel);
+router.route("/registerUserInChannel").post(protect, registerUserInChannel);
+
+// @desc        remove user from channel
+// route        http://localhost:6090/api/user/removeuserchannel
+// method       post
+
+router.route("/removechannel").delete(protect, removeUserFromChannel);
 
 module.exports = router;

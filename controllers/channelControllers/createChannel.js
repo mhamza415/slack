@@ -1,4 +1,4 @@
-const { Channel, Workspace, users } = require("../../models");
+const { Channel, Workspace, User } = require("../../models");
 
 // create channel controller
 
@@ -59,16 +59,53 @@ const getWorkSpaceChannel = async (req, res) => {
 
 const registerUserInChannel = async (req, res) => {
   try {
-    const { channelId, userId } = req.params;
-    //console.log(userId, channelId);
+    const { channelId, userID } = req.body;
+    console.log(userID, channelId);
+    const user = await User.findByPk(userID);
     const channel = await Channel.findByPk(channelId);
-    console.log(channel.channel_name);
+    console.log(user);
+    if (!user || !channel) {
+      return res.status(404).json({ message: "User or channel not found" });
+    }
+    await channel.addUser(user);
+    return res
+      .status(200)
+      .json({ message: "User registered in channel successfully" });
   } catch (error) {
-    console.error("Error retrieving channels in workspace:", error);
+    console.error("Error adding in channel:", error);
     return res
       .status(500)
       .send({ success: false, error: "Internal server error." });
   }
 };
 
-module.exports = { createChannel, getWorkSpaceChannel, registerUserInChannel };
+// remove user from channel
+
+const removeUserFromChannel = async (req, res) => {
+  try {
+    const { userID, channelId } = req.body;
+    //console.log(userId, channelId);
+    const user = await User.findByPk(userID);
+    const channel = await Channel.findByPk(channelId);
+    //console.log(user);
+    if (!user || !channel) {
+      return res.status(404).json({ message: "User or channel not found" });
+    }
+    await channel.removeUser(user);
+    return res
+      .status(200)
+      .json({ message: "User registered in channel successfully" });
+  } catch (error) {
+    console.error("Error removing in channel:", error);
+    return res
+      .status(500)
+      .send({ success: false, error: "Internal server error." });
+  }
+};
+
+module.exports = {
+  createChannel,
+  getWorkSpaceChannel,
+  registerUserInChannel,
+  removeUserFromChannel,
+};
