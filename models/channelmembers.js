@@ -1,25 +1,22 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Workspace extends Model {
+  class channelmembers extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate({ Channel }) {
-      this.hasMany(Channel, { foreignKey: "workspace_id" });
+    static associate(models) {
+      // define association here
     }
   }
-  Workspace.init(
-    {
-      name: DataTypes.STRING,
-    },
+  channelmembers.init(
+    {},
     {
       sequelize,
-      modelName: "Workspace",
-      tableName: "workspaces",
+      modelName: "channelmembers",
     }
   );
-  return Workspace;
+  return channelmembers;
 };
