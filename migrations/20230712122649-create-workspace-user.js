@@ -3,17 +3,27 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('workspace_users', {
-      // id: {
-      //   allowNull: false,
-      //   autoIncrement: true,
-      //   primaryKey: true,
-      //   type: Sequelize.INTEGER
-      // },
+      id: {
+        allowNull: false,
+        primaryKey: true,
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.literal('uuid_generate_v4()'),
+      },
       w_id: {
-        type: Sequelize.STRING
+        type: Sequelize.UUID,
+        primaryKey: true,
+        references: {
+          model: "Workspace",
+          key: "id",
+        },
       },
       u_id: {
-        type: Sequelize.STRING
+        type: Sequelize.UUID,
+        primaryKey: true,
+        references: {
+          model: "User",
+          key: "id",
+        },
       },
       createdAt: {
         allowNull: false,

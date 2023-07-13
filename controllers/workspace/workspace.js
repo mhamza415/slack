@@ -3,20 +3,18 @@
 const { Workspace } = require("./../../models");
 
 //It create workspace in databases
-const createWorkspace = async (req, res) => {
+const createWorkspace = async (name) => {
   try {
-    const { name } = req.body;
+    // const { name } = req.body;
     const isExist = await isExistWorkSpace(name);
     console.log("--------------------->", isExist);
     if (isExist == true) {
-      res.status(500).json("is Exist");
+      return false
     } else {
       const status = await saveWorkSpaceName(name);
       if (status)
-        res
-          .status(200)
-          .json({ response: "workspace save in database", data: status });
-      else res.status(500).json("error to save data");
+        return status
+      else return false;
     }
   } catch (error) {
     console.error("Error to save workspace in db", error);
