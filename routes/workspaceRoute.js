@@ -4,13 +4,15 @@ const {
   createWorkspace,
   editWorkspace,
 } = require("../controllers/workspace/workspace");
+const {saveWorkSpaceOfUser} = require("../controllers/workspace/workspace_user");
 
 // @desc        create workspace
 // route        http://localhost:6090/api/workspace/create
 // required
-//      body        name
+//      params        w_name,u_id
 // method       post
-router.route("/create").post(createWorkspace);
+router.route("/create/:w_name/:u_id").post(saveWorkSpaceOfUser);
+// router.route("/create").post(createWorkspace);
 
 // @desc        edit workspace
 // route        http://localhost:6090/api/workspace/edit
