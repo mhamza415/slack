@@ -60,10 +60,10 @@ const getWorkSpaceChannel = async (req, res) => {
 const registerUserInChannel = async (req, res) => {
   try {
     const { channelId, userID } = req.body;
-    console.log(userID, channelId);
+    //console.log(userID, channelId);
     const user = await User.findByPk(userID);
     const channel = await Channel.findByPk(channelId);
-    console.log(user);
+    //console.log(user);
     if (!user || !channel) {
       return res.status(404).json({ message: "User or channel not found" });
     }
