@@ -4,13 +4,20 @@ const registerUser = require("../controllers/userControllers/registerUser");
 const { verifyOtp } = require("../controllers/userControllers/verifyOtp");
 const loginUser = require("../controllers/userControllers/loginUser");
 const userPic = require("../controllers/userControllers/userPic");
+const userData = require("../controllers/userControllers/userData");
 const upload = require("../utils/multerFileStorage");
+
 // @desc        create user 
 // route        http://localhost:6090/api/user/register
 // method       post
 
 router.route("/register").post(registerUser);
 
+// @desc        get single user 
+// route        http://localhost:6090/api/user/id
+// method       post
+
+router.route("/:id").get(userData);
 
 // @desc        verify user
 // route        http://localhost:6090/api/user/verifyotp
