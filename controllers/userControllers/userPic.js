@@ -1,7 +1,7 @@
 const { User } = require('../../models');
 
 async function userPic(req, res) {
-    const path = req.file.path;
+    const path = req.file.cloudinaryUrl;
     const { id, name } = req.body;
     if (!id && !name) {
         return res.status(400).json({ message: 'id and name is required.' });
@@ -27,12 +27,12 @@ async function userPic(req, res) {
         return res.send("updation not successful");
     }
 
+    console.log(`filename: ${req.file}`);
 
     res.status(201).json({
         id: updatedUser.id,
         email: updatedUser.email,
-        filename: req.file.filename,
-        photoPath: updatedUser.photo
+        URL: path
     });
 
 }
