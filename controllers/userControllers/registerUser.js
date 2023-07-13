@@ -26,7 +26,7 @@ async function registerUser(req, res) {
         id: newUser.id,
         email: newUser.email,
         role: newUser.role,
-        token: generateToken(),
+        token: generateToken(newUser.id),
     });
 };
 // function call is in isExisting function

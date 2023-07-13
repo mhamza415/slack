@@ -15,7 +15,7 @@ async function loginUser(req, res) {
         id: updatedUser.id,
         email: updatedUser.email,
         role: updatedUser.role,
-        token: generateToken(),
+        token: generateToken(updatedUser.id),
     });
 }
 
