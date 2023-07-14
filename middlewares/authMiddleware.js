@@ -9,13 +9,14 @@ const protect = async (req, res, next) => {
     try {
       token = req.headers.authorization.split(" ")[1];
       const decoded = await jwt.verify(token, process.env.JWT_SECRET);
-
+      console.log("decoded", decoded);
       if (!decoded) {
         res.status(401);
         throw new Error("You are unauthorized to make this request");
       }
 
       req.user = await User.findByPk(decoded.id);
+      console.log(req.user);
       next();
     } catch (error) {
       res.status(401);
