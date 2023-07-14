@@ -25,7 +25,7 @@ const verifyOtp = async (req, res) => {
     //console.log(user.otp);
     //console.log(user.otp_expires);
     if (user && user.otp === otp && currentTime < user.otp_expires) {
-      return res.status(201).json({
+      return res.status(200).json({
         id: user.id,
         email: user.email,
         role: user.role,
