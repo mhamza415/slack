@@ -5,7 +5,7 @@ const workSpaceRoutes = require("./routes/workspaceRoute");
 const channelRoutes = require("./routes/channelRoutes");
 const http = require("http");
 const socketIO = require("socket.io");
-const { logger } = require("./services/winston")
+const { logger } = require("./services/winston");
 
 // Create HTTP server
 const server = http.createServer(app);
@@ -15,7 +15,7 @@ const io = socketIO(server);
 
 io.on("connection", (socket) => {
   console.log("A user connected");
-
+  logger.info(socket);
   socket.on("disconnect", () => {
     console.log("A user disconnected");
   });
@@ -27,11 +27,6 @@ io.on("connection", (socket) => {
   //   io.emit("chat message", message);
   // });
 });
-//  log statements
-logger.info("This is an informational log message.");
-logger.warn("This is a warning log message.");
-logger.error("This is an error log message.");
-
 
 // Routes
 app.get("/", (req, res) => {
