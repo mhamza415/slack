@@ -17,22 +17,27 @@ const findUserNameByName = async (email) => {
 //It save Workspace according to id who has access
 const saveWorkSpaceOfUser = async (req, res) => {
   try {
-    const { w_name, u_id } = req.params;  // get required data
-    const haveWorkspace = await checkUserHavWorkspace(u_id, w_name);  // check if user have already workspace with its name or not
-    if (haveWorkspace) {
-      res.status(203).send("Already exists");
-    } else {
-      const saveWorkSpace = await saveWorkSpaceName(w_name);        // save workspace in workspace table
-      if (saveWorkSpace == false) {
-        res.status(500).send("Cannot save data in workspace");
+    const u_id = req.user.id; // get required data
+    const w_name = req.body.w_name;
+    if (w_name == null) res.status(400).send({ message: "field required" });
+    else {
+      const haveWorkspace = await checkUserHavWorkspace(u_id, w_name); // check if user have already workspace with its name or not
+      if (haveWorkspace) {
+        res.status(203).send("Already exists");
       } else {
-        const user = await User.findByPk(u_id);
-        const status = await workspace_user.create({
-          w_id: saveWorkSpace.dataValues.id,
-          u_id: user.dataValues.id,
-        });     // 
-        status==null?res.status(500).send('cannot save workspace in workspace_user'):res.status(200).send(status);
-        
+        const saveWorkSpace = await saveWorkSpaceName(w_name); // save workspace in workspace table
+        if (saveWorkSpace == false) {
+          res.status(500).send("Cannot save data in workspace");
+        } else {
+          const user = await User.findByPk(u_id);
+          const status = await workspace_user.create({
+            w_id: saveWorkSpace.dataValues.id,
+            u_id: user.dataValues.id,
+          }); //
+          status == null
+            ? res.status(500).send("cannot save workspace in workspace_user")
+            : res.status(200).send(status);
+        }
       }
     }
   } catch (error) {
