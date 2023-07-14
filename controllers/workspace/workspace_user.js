@@ -17,6 +17,7 @@ const findUserNameByName = async (email) => {
 //It save Workspace according to id who has access
 const saveWorkSpaceOfUser = async (req, res) => {
   try {
+
     const u_id = req.user.id; // get required data
     const w_name = req.body.w_name;
     if (w_name == null) res.status(400).send({ message: "field required" });
@@ -38,6 +39,7 @@ const saveWorkSpaceOfUser = async (req, res) => {
             ? res.status(500).send("cannot save workspace in workspace_user")
             : res.status(200).send(status);
         }
+
       }
     }
   } catch (error) {

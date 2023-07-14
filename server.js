@@ -3,8 +3,39 @@ const { notFound, errorHandler } = require("./middlewares/errorMiddleware");
 const userRoutes = require("./routes/userRoutes");
 const workSpaceRoutes = require("./routes/workspaceRoute");
 const channelRoutes = require("./routes/channelRoutes");
+const http = require("http");
+const socketIO = require("socket.io");
+const { logger } = require("./services/winston")
+
+// Create HTTP server
+const server = http.createServer(app);
+
+// Initialize Socket.io
+const io = socketIO(server);
+
+io.on("connection", (socket) => {
+  console.log("A user connected");
+
+  socket.on("disconnect", () => {
+    console.log("A user disconnected");
+  });
+
+  // Define your custom event handlers here
+  // socket.on("chat message", (message) => {
+  //   console.log("Received message:", message);
+  //   // You can broadcast the message to all connected clients
+  //   io.emit("chat message", message);
+  // });
+});
+//  log statements
+logger.info("This is an informational log message.");
+logger.warn("This is a warning log message.");
+logger.error("This is an error log message.");
+
+
+// Routes
 app.get("/", (req, res) => {
-  res.status(200).send("server is listening...");
+  res.status(200).send("Server is listening...");
 });
 
 app.use("/api/user", userRoutes);
@@ -15,7 +46,7 @@ app.use(notFound);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 6090;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(
     `Server is running in ${process.env.NODE_ENV} mode on port:${process.env.PORT}`
       .green.bold
