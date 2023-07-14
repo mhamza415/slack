@@ -6,6 +6,7 @@ const channelRoutes = require("./routes/channelRoutes");
 const http = require("http");
 const socketIO = require("socket.io");
 const { logger } = require("./services/winston");
+const messageRoutes = require("./routes/messageRoutes")
 
 // Create HTTP server
 const server = http.createServer(app);
@@ -19,13 +20,6 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log("A user disconnected");
   });
-
-  // Define your custom event handlers here
-  // socket.on("chat message", (message) => {
-  //   console.log("Received message:", message);
-  //   // You can broadcast the message to all connected clients
-  //   io.emit("chat message", message);
-  // });
 });
 
 // Routes
@@ -36,6 +30,7 @@ app.get("/", (req, res) => {
 app.use("/api/user", userRoutes);
 app.use("/api/workspace", workSpaceRoutes);
 app.use("/api/channel", channelRoutes);
+app.use("/api/message", messageRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
@@ -46,4 +41,19 @@ server.listen(PORT, () => {
     `Server is running in ${process.env.NODE_ENV} mode on port:${process.env.PORT}`
       .green.bold
   );
+});
+
+global.onlineUsers = new Map();
+io.on("connection", (socket) => {
+  global.chatSocket = socket;
+  socket.on("add-user", (userId) => {
+    onlineUsers.set(userId, socket.id);
+  });
+
+  socket.on("send-msg", (data) => {
+    const sendUserSocket = onlineUsers.get(data.to);
+    if (sendUserSocket) {
+      socket.to(sendUserSocket).emit("msg-recieve", data.msg);
+    }
+  });
 });
