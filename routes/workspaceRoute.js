@@ -4,18 +4,20 @@ const {
   createWorkspace,
   editWorkspace,
 } = require("../controllers/workspace/workspace");
-const {protect} = require("../middlewares/authMiddleware");
-const {
-  saveWorkSpaceOfUser,
-} = require("../controllers/workspace/workspace_user");
+
+const {saveWorkSpaceOfUser} = require("../controllers/workspace/workspace_user");
+const {protect}=require('./../middlewares/authMiddleware')
+
 
 // @desc        create workspace
 // route        http://localhost:6090/api/workspace/create
 // required
-//      body        w_name
-//      required    token
+
+//      body        w_name,
+//      header      token
 // method       post
-router.route("/create").post(protect, saveWorkSpaceOfUser);
+router.route("/create").post(protect,saveWorkSpaceOfUser);
+
 // router.route("/create").post(createWorkspace);
 
 // @desc        edit workspace
@@ -24,6 +26,8 @@ router.route("/create").post(protect, saveWorkSpaceOfUser);
 //      body        name,workspaceId
 // method       post
 
-router.route("/edit").post(protect, editWorkspace);
+
+router.route("/edit").post(protect,editWorkspace);
+
 
 module.exports = router;

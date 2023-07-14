@@ -7,9 +7,12 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate({ User, Workspace }) {
-      this.belongsTo(Workspace, { foreignKey: "id" });
-      this.belongsTo(User, { foreignKey: "id" });
+    static associate({ User, Workspace, workspace_user }) {
+      this.belongsTo(Workspace, { foreignKey: "w_id" });
+      this.belongsTo(User, {
+        through: workspace_user,
+        foreignKey: "u_id",
+      });
     }
   }
   workspace_user.init(
@@ -19,7 +22,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "workspace_user",
       modelName: "workspace_user",
     }
   );
