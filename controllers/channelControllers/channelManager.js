@@ -16,6 +16,12 @@ const createChannel = async (req, res) => {
         .status(400)
         .send({ success: false, message: "Workspace ID cannot be null." });
     }
+    const workspace = await Workspace.findOne({ where: { id: workspaceid } });
+    if (!workspace) {
+      return res
+        .status(404)
+        .json({ success: false, message: "workspace not found" });
+    }
     const channel = await Channel.create({
       channel_name: name,
       workspace_id: workspaceid,
