@@ -6,7 +6,7 @@ const connectDB = require("./config/dbConnection");
 const cors = require("cors");
 const connectMongo = require("./config/database");
 const { logger } = require("./services/winston");
-
+const redisConnection = require("./config/redis")
 const app = express();
 dotenv.config();
 app.use(cors());
@@ -14,6 +14,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 connectDB();
 connectMongo();
+redisConnection();
 
 const morganStream = {
   write: (message) => {
