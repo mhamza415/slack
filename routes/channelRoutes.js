@@ -9,25 +9,25 @@ const {
 } = require("../controllers/channelControllers/channelManager");
 
 // @desc        create channel
-// route        http://localhost:6090/api/user/createchannel
+// route        http://localhost:6090/api/channel/createchannel
 // method       post
 
 router.route("/createchannel").post(protect, createChannel);
 
 // @desc        create channel
-// route        http://localhost:6090/api/user/getWorkSpaceChannel
+// route        http://localhost:6090/api/channel/getWorkSpaceChannel
 // method       post
 
 router.route("/getWorkSpaceChannel/:id").get(protect, getWorkSpaceChannel);
 
 // @desc        register user in channel
-// route        http://localhost:6090/api/user/getWorkSpaceChannel
+// route        http://localhost:6090/api/channel/getWorkSpaceChannel
 // method       post
 
 router.route("/registerUserInChannel").post(protect, registerUserInChannel);
 
 // @desc        remove user from channel
-// route        http://localhost:6090/api/user/removeuserchannel
+// route        http://localhost:6090/api/channel/removeuserchannel
 // method       post
 
 router.route("/removechannel").delete(protect, removeUserFromChannel);
