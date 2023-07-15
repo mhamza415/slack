@@ -1,9 +1,13 @@
 const express = require("express");
 const { protect } = require("../middlewares/authMiddleware");
 const router = express.Router();
+
 const {
   sendMessage,
 } = require("./../controllers/messages/save_message_controller");
+
+const updateMessage = require("../controllers/messages")
+
 
 // @desc        create channel
 // route        http://localhost:6090/api/message/send
@@ -19,14 +23,15 @@ router.route("/send").post(protect, sendMessage);
 router.route("/get").get(protect, () => {});
 
 // @desc        register user in channel
-// route        http://localhost:6090/api/channel/registerUserInChannel
+// route        http://localhost:6090/api/message/update
 // method       post
 // you need to add the token for hitting this route
 
-router.route("/update").post(protect, () => {});
+
+router.route("/update/:id").post(protect, updateMessage);
 
 // @desc        remove user from channel
-// route        http://localhost:6090/api/channel/removeuserchannel
+// route        http://localhost:6090/api/message/delete
 // method       post
 // you need to add the token for hitting this route
 
