@@ -6,32 +6,29 @@ const {
   getWorkSpaceChannel,
   registerUserInChannel,
   removeUserFromChannel,
-} = require("../controllers/channelControllers/createChannel");
+} = require("../controllers/channelControllers/channelManager");
 
 // @desc        create channel
-// route        http://localhost:6090/api/channel/createchannel
+// route        http://localhost:6090/api/user/createchannel
 // method       post
-// you need to add the token for hitting this route
+
 router.route("/createchannel").post(protect, createChannel);
 
-// @desc        getting the workspace channels
-// route        http://localhost:6090/api/channel/getWorkSpaceChannel
+// @desc        create channel
+// route        http://localhost:6090/api/user/getWorkSpaceChannel
 // method       post
-// you need to add the token for hitting this route
 
 router.route("/getWorkSpaceChannel/:id").get(protect, getWorkSpaceChannel);
 
 // @desc        register user in channel
-// route        http://localhost:6090/api/channel/registerUserInChannel
+// route        http://localhost:6090/api/user/getWorkSpaceChannel
 // method       post
-// you need to add the token for hitting this route
 
 router.route("/registerUserInChannel").post(protect, registerUserInChannel);
 
 // @desc        remove user from channel
-// route        http://localhost:6090/api/channel/removeuserchannel
+// route        http://localhost:6090/api/user/removeuserchannel
 // method       post
-// you need to add the token for hitting this route
 
 router.route("/removechannel").delete(protect, removeUserFromChannel);
 
