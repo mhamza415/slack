@@ -1,7 +1,7 @@
 const express = require("express");
 const { protect } = require("../middlewares/authMiddleware");
 const router = express.Router();
-
+const updateMessage = require("../controllers/messages")
 
 // @desc        create channel
 // route        http://localhost:6090/api/channel/createchannel
@@ -21,7 +21,7 @@ router.route("/get").get(protect, () => { });
 // method       post
 // you need to add the token for hitting this route
 
-router.route("/update").post(protect, () => { });
+router.route("/update/:id").post(protect, updateMessage);
 
 // @desc        remove user from channel
 // route        http://localhost:6090/api/message/delete
