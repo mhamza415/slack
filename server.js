@@ -37,25 +37,33 @@ server.listen(PORT, () => {
 });
 
 
-global.onlineUsers = new Map();
-io.on("connection", (socket) => {
-  console.log("A user connected"); // A user connected
-  logger.info(socket);
+// Socket.io event listeners
+const onlineUsers = new Map();
 
-  global.chatSocket = socket;
+io.on("connection", (socket) => {
+  console.log("A user connected");
+  logger.info(`user connected with socketId ${socket.id}`);
 
   socket.on("add-user", (userId) => {
     onlineUsers.set(userId, socket.id);
+    console.log(`User ${userId} is registered`);
   });
-
+  //  in data send msg and to userId
   socket.on("send-msg", (data) => {
     const sendUserSocket = onlineUsers.get(data.to);
     if (sendUserSocket) {
-      socket.to(sendUserSocket).emit("msg-recieve", data.msg);
+      io.to(sendUserSocket).emit("msg-recieve", data);
     }
   });
 
   socket.on("disconnect", () => {
-    console.log("A user disconnected"); // A user disconnected
+    console.log("A user disconnected");
+    // Remove the disconnected user from onlineUsers map
+    onlineUsers.forEach((socketId, userId) => {
+      if (socketId === socket.id) {
+        onlineUsers.delete(userId);
+        console.log(`User ${userId} is disconnected and removed from onlineUsers`);
+      }
+    });
   });
 });
