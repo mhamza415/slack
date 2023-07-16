@@ -14,10 +14,10 @@ const redisClient = redis.createClient({
   await redisClient.connect();
 })();
 
-console.log("connecting redis");
+console.log(`connecting redis`.yellow);
 
 redisClient.on("ready", () => {
-  console.log("connected to redis");
+  console.log(`connected to redis`.yellow.underline.bold);
 });
 
 redisClient.on("error", (err) => {

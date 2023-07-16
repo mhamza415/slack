@@ -2,7 +2,7 @@ const { sequelize } = require("../models");
 async function connectDB() {
     try {
         await sequelize.authenticate();
-        console.log(`PGsql connected Successfully`.cyan.underline.bold);
+        console.log(`PGsql connected Successfully`.green.underline.bold);
     } catch (error) {
         console.log("Database connection failed. exiting now ...".red.bold);
         console.error(error);
