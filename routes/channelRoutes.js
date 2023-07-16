@@ -14,7 +14,7 @@ const {
 
 router.route("/createchannel").post(protect, createChannel);
 
-// @desc        create channel
+// @desc        get single channel details
 // route        http://localhost:6090/api/channel/getWorkSpaceChannel
 // method       post
 

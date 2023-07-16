@@ -12,7 +12,14 @@ const messageRoutes = require("./routes/messageRoutes")
 const server = http.createServer(app);
 
 // Initialize Socket.io
-const io = socketIO(server);
+const io = socketIO(server, {
+  cors: {
+    origin: "http://localhost:8080",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Authorization", "Content-Type"],
+    credentials: true
+  }
+});
 
 
 // Routes
