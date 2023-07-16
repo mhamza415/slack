@@ -14,13 +14,6 @@ const server = http.createServer(app);
 // Initialize Socket.io
 const io = socketIO(server);
 
-io.on("connection", (socket) => {
-  console.log("A user connected");
-  logger.info(socket);
-  socket.on("disconnect", () => {
-    console.log("A user disconnected");
-  });
-});
 
 // Routes
 app.get("/", (req, res) => {
@@ -43,9 +36,14 @@ server.listen(PORT, () => {
   );
 });
 
+
 global.onlineUsers = new Map();
 io.on("connection", (socket) => {
+  console.log("A user connected"); // A user connected
+  logger.info(socket);
+
   global.chatSocket = socket;
+
   socket.on("add-user", (userId) => {
     onlineUsers.set(userId, socket.id);
   });
@@ -55,5 +53,9 @@ io.on("connection", (socket) => {
     if (sendUserSocket) {
       socket.to(sendUserSocket).emit("msg-recieve", data.msg);
     }
+  });
+
+  socket.on("disconnect", () => {
+    console.log("A user disconnected"); // A user disconnected
   });
 });
