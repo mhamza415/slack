@@ -31,7 +31,9 @@ const sendMessage = async (req, res) => {
       messages: message,
     };
     const data = await storeRedis(s_value);
-    res.status(200).send(data);
+    data
+      ? res.status(200).send("saved")
+      : res.status(500).send("failed to save");
   } catch (error) {
     console.log("Error in sendMessage:", error);
     res.status(401).send({ message: "Error sending message", error: error });
@@ -44,15 +46,16 @@ async function storeRedis(s_value) {
   const mergedValue = existingValue
     ? existingValue + JSON.stringify(s_value)
     : JSON.stringify(s_value);
-  await redisClient.set(process.env.REDIS_KEY, mergedValue);
-  return CheckRedisLength();
+  const status = await redisClient.set(process.env.REDIS_KEY, mergedValue);
+
+  return status ? CheckRedisLength() : false;
 }
 async function CheckRedisLength() {
   const get = await redisClient.get(process.env.REDIS_KEY);
   const objectStrings = get.split("{");
   if (objectStrings.length >= 10)
     return await destructureRedisData(objectStrings);
-  else return get;
+  else return true;
 }
 
 async function destructureRedisData(objectStrings) {
