@@ -3,32 +3,72 @@ const { Op } = require("sequelize");
 const { Message } = require("../../models");
 const redisClient = require("../../config/redis");
 
-// Controller for fetching the messages and sending the response
+const key = "users";
+const expirySeconds = 9000;
+
+const intializeRedis = async () => {
+  let messages = await gettingAllMessages();
+  if (messages) {
+    const isCreate = await storeMessagesInRedis(key, messages, expirySeconds);
+    return isCreate;
+  }
+};
+
+const destructureRedisSave = async () => {
+  const getMessagesFromRedSave = await redisClient.get("message_data");
+  if (getMessagesFromRedSave == null) return null;
+  const objectStrings = getMessagesFromRedSave.split("{");
+  if (objectStrings.length == 1) return objectStrings;
+  const objects = await objectStrings
+    .slice(1, objectStrings.length)
+    .map((objectString) => {
+      console.log("--->||", objectString);
+      if (objectString != null) return JSON.parse("{" + objectString);
+    });
+  return objects;
+};
+
+const getMessagesFromAndTo = async (messages, from, to) => {
+  const filteredMessages = messages.filter((message) => {
+    return message.from === from && message.to === to;
+  });
+
+  return filteredMessages;
+};
+const getMessagesFromAndToSave = async (messages, from, to) => {
+  let filteredMessages = [];
+  messages.map((message) => {
+    if (
+      (message.from === from && message.to === to) ||
+      (message.to === from && message.from === to)
+    )
+      filteredMessages.push(message);
+  });
+
+  return filteredMessages;
+};
 const getMessages = async (req, res) => {
   try {
     const receiverId = req.params.toId;
     const senderId = req.user.id;
-    const messagesCacheKey = `messages:${senderId}:${receiverId}`;
-
-    const redisResponse = await getMessagesFromRedis(messagesCacheKey);
-    if (redisResponse) {
-      const parsedMessages = JSON.parse(redisResponse);
-      return res.status(200).json(parsedMessages);
-    }
-
-    console.log("not getting response from redisResponse");
-    const messages = await getMessageFromDatabase(senderId, receiverId);
-    if (messages.length === 0) {
-      return res
-        .status(404)
-        .send({ success: false, message: "No messages available" });
-    }
-
-    await storeMessagesInRedis(messagesCacheKey, messages);
-    return res.status(200).json({
-      success: true,
-      message: "successfully stored the message from redis",
-    });
+    const expirySeconds = 900;
+    const getMesFromRed = await fetchMessagesFromRedis("users");
+    const parsedMessages = await destructureRedisSave();
+    // if (!getMesFromRed) {
+    //   await intializeRedis();
+    //   const mess = await getMessagesFromAndTo(
+    //     getMesFromRed,
+    //     senderId,
+    //     receiverId
+    //   );
+    //   res.status(200).send(mess);
+    // }
+    const mess = await getMessagesFromAndToAwais(
+      parsedMessages,
+      senderId,
+      receiverId
+    );
+    res.status(200).send(mess);
   } catch (error) {
     console.error("Error retrieving messages:", error);
     return res
@@ -37,20 +77,14 @@ const getMessages = async (req, res) => {
   }
 };
 
-// Sequelize ORM query for fetching the one-to-one conversation messages
-const getMessageFromDatabase = async (senderId, receiverId) => {
-  return Message.findAll({
-    where: {
-      [Op.or]: [
-        { from: senderId, to: receiverId },
-        { from: receiverId, to: senderId },
-      ],
-    },
-  });
+// getting all the messages from the database
+
+const gettingAllMessages = async () => {
+  return Message.findAll();
 };
 
 // Function to get messages from Redis
-const getMessagesFromRedis = async (key) => {
+const fetchMessagesFromRedis = async (key) => {
   try {
     console.log("successfully fetched the messages from redis");
     return await redisClient.get(key);
@@ -61,10 +95,11 @@ const getMessagesFromRedis = async (key) => {
 };
 
 // Function to store messages in Redis
-const storeMessagesInRedis = async (key, messages) => {
+const storeMessagesInRedis = async (key, messages, expirySeconds) => {
   try {
-    const latestMessages = messages.slice(-2);
-    await redisClient.set(key, JSON.stringify(latestMessages));
+    //const latestMessages = messages.slice(-2);
+    await redisClient.set(key, JSON.stringify(messages));
+    await redisClient.expire(key, expirySeconds);
     console.log("Messages stored in Redis successfully");
   } catch (error) {
     throw error;
