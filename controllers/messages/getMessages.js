@@ -14,61 +14,34 @@ const intializeRedis = async () => {
   }
 };
 
-const destructureRedisSave = async () => {
-  const getMessagesFromRedSave = await redisClient.get("message_data");
-  if (getMessagesFromRedSave == null) return null;
-  const objectStrings = getMessagesFromRedSave.split("{");
-  if (objectStrings.length == 1) return objectStrings;
-  const objects = await objectStrings
-    .slice(1, objectStrings.length)
-    .map((objectString) => {
-      console.log("--->||", objectString);
-      if (objectString != null) return JSON.parse("{" + objectString);
-    });
-  return objects;
-};
-
-const getMessagesFromAndTo = async (messages, from, to) => {
-  const filteredMessages = messages.filter((message) => {
-    return message.from === from && message.to === to;
-  });
-
-  return filteredMessages;
-};
-const getMessagesFromAndToSave = async (messages, from, to) => {
-  let filteredMessages = [];
-  messages.map((message) => {
-    if (
-      (message.from === from && message.to === to) ||
-      (message.to === from && message.from === to)
-    )
-      filteredMessages.push(message);
-  });
-
-  return filteredMessages;
-};
 const getMessages = async (req, res) => {
   try {
     const receiverId = req.params.toId;
     const senderId = req.user.id;
-    const expirySeconds = 900;
+    let mess = "";
+    let saveDbRed = "";
     const getMesFromRed = await fetchMessagesFromRedis("users");
-    const parsedMessages = await destructureRedisSave();
-    // if (!getMesFromRed) {
-    //   await intializeRedis();
-    //   const mess = await getMessagesFromAndTo(
-    //     getMesFromRed,
-    //     senderId,
-    //     receiverId
-    //   );
-    //   res.status(200).send(mess);
-    // }
-    const mess = await getMessagesFromAndToAwais(
-      parsedMessages,
-      senderId,
-      receiverId
-    );
-    res.status(200).send(mess);
+    const parsedMessages = JSON.parse(getMesFromRed);
+    const parsedMessagesSave = await destructureRedisSave();
+    if (!getMesFromRed) {
+      await intializeRedis();
+      mess = await getMessagesFromAndTo(parsedMessages, senderId, receiverId);
+    } else {
+      mess = await getMessagesFromAndTo(
+        parsedMessagesSave,
+        senderId,
+        receiverId
+      );
+    }
+    if (parsedMessages) {
+      saveDbRed = await getMessagesFromAndToSave(
+        parsedMessages,
+        senderId,
+        receiverId
+      );
+    }
+    const mergedData = [...saveDbRed, ...mess];
+    res.status(200).send(mergedData);
   } catch (error) {
     console.error("Error retrieving messages:", error);
     return res
@@ -104,6 +77,41 @@ const storeMessagesInRedis = async (key, messages, expirySeconds) => {
   } catch (error) {
     throw error;
   }
+};
+const destructureRedisSave = async () => {
+  const getMessagesFromRedSave = await redisClient.get("message_data");
+  if (getMessagesFromRedSave == null) return null;
+  const objectStrings = getMessagesFromRedSave.split("{");
+  if (objectStrings.length == 1) return objectStrings;
+  const objects = await objectStrings
+    .slice(1, objectStrings.length)
+    .map((objectString) => {
+      console.log("--->||", objectString);
+      if (objectString != null) return JSON.parse("{" + objectString);
+    });
+  return objects;
+};
+
+const getMessagesFromAndTo = async (messages, from, to) => {
+  const filteredMessages = messages.filter((message) => {
+    return (
+      (message.from === from && message.to === to) ||
+      (message.to === from && message.from === to)
+    );
+  });
+  return filteredMessages;
+};
+const getMessagesFromAndToSave = async (messages, from, to) => {
+  let filteredMessages = [];
+  messages.map((message) => {
+    if (
+      (message.from === from && message.to === to) ||
+      (message.to === from && message.from === to)
+    )
+      filteredMessages.push(message);
+  });
+
+  return filteredMessages;
 };
 
 module.exports = { getMessages };
