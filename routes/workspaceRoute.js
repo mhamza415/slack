@@ -8,6 +8,7 @@ const {
 const {saveWorkSpaceOfUser} = require("../controllers/workspace/workspace_user");
 const {addMembersInWorkspace} = require("../controllers/workspace/addMember");
 const {getAllMemberAgainstWorkspace} = require("../controllers/workspace/getAllMember");
+const {getAllWorkspaceAgainstMember} = require("../controllers/workspace/getWorkspace");
 const {protect}=require('./../middlewares/authMiddleware')
 
 
@@ -43,6 +44,13 @@ router.route("/addMember").post(protect,addMembersInWorkspace);
 //      params        w_id
 // method       get
 router.route("/getUsers/:w_id").get(protect,getAllMemberAgainstWorkspace);
+
+// @desc        get workspaces
+// route        http://localhost:6090/api/workspace/getWorkspace
+// required
+//      token required
+// method       get
+router.route("/getWorkspace").get(protect,getAllWorkspaceAgainstMember);
 
 
 module.exports = router;
