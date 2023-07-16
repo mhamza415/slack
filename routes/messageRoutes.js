@@ -5,7 +5,7 @@ const router = express.Router();
 const {
   sendMessage,
 } = require("./../controllers/messages/save_message_controller");
-const getMessages = require("../controllers/messages/getMessages")
+const { getMessages } = require("../controllers/messages/getMessages");
 
 const { deleteMessage } = require("../controllers/messages/deleteMessages");
 const updateMessage = require("../controllers/messages/updateMessage");
@@ -14,17 +14,17 @@ const updateMessage = require("../controllers/messages/updateMessage");
 // route        http://localhost:6090/api/message/send
 // method       post
 // you need to add the token for hitting this route
-// body 
-//      to                |--> user id to send that user        
+// body
+//      to                |--> user id to send that user
 //      message           |--> message that want to send
 router.route("/send").post(protect, sendMessage);
 
 // @desc        getting the workspace channels
-// route        http://localhost:6090/api/message/get/:to_id
+// route        http://localhost:6090/api/message/get/:toId
 // method       post
 // you need to add the token for hitting this route
 
-router.route("/get/:to_id").get(protect, getMessages);
+router.route("/get/:toId").get(protect, getMessages);
 
 // @desc        register user in channel
 // route        http://localhost:6090/api/message/update/:m_id
