@@ -1,5 +1,5 @@
-const { Message } = require("../../models");
-const redisClient = require("../../config/redis");
+const { Message } = require("./../models");
+const redisClient = require("./../config/redis");
 
 const key = "users";
 const expirySeconds = 9000;
