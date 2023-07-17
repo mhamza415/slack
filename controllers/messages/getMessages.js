@@ -28,14 +28,14 @@ const getMessages = async (req, res) => {
       mess = await getMessagesFromAndTo(parsedMessages, senderId, receiverId);
     } else {
       mess = await getMessagesFromAndTo(
-        parsedMessagesSave,
+        parsedMessages,
         senderId,
         receiverId
       );
     }
-    if (parsedMessages) {
+    if (parsedMessagesSave) {
       saveDbRed = await getMessagesFromAndToSave(
-        parsedMessages,
+        parsedMessagesSave,
         senderId,
         receiverId
       );
