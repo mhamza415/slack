@@ -10,7 +10,7 @@ const { getMessages } = require("../controllers/messages/getMessages");
 const { deleteMessage } = require("../controllers/messages/deleteMessages");
 const updateMessage = require("../controllers/messages/updateMessage");
 
-// @desc        create channel
+// @desc        create message
 // route        http://localhost:6090/api/message/send
 // method       post
 // you need to add the token for hitting this route
@@ -19,14 +19,14 @@ const updateMessage = require("../controllers/messages/updateMessage");
 //      message           |--> message that want to send
 router.route("/send").post(protect, sendMessage);
 
-// @desc        getting the workspace channels
+// @desc        getting messages
 // route        http://localhost:6090/api/message/get/:toId
 // method       post
 // you need to add the token for hitting this route
 
 router.route("/get/:toId").get(protect, getMessages);
 
-// @desc        register user in channel
+// @desc        update messages
 // route        http://localhost:6090/api/message/update/:m_id
 // method       post
 // you need to add the token for hitting this route
@@ -35,7 +35,7 @@ router.route("/get/:toId").get(protect, getMessages);
 
 router.route("/update/:m_id").post(protect, updateMessage);
 
-// @desc        remove user from channel
+// @desc        delete message
 // route        http://localhost:6090/api/message/delete/:m_id
 // method       post
 // you need to add the token for hitting this route

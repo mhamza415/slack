@@ -106,7 +106,7 @@ const removeUserFromChannel = async (req, res) => {
     await channel.removeUser(user);
     return res
       .status(200)
-      .json({ message: "User registered in channel successfully" });
+      .json({ message: "User remove from channel successfully" });
   } catch (error) {
     console.error("Error removing in channel:", error);
     return res
