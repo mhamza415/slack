@@ -1,5 +1,6 @@
 const { User, Message } = require("./../../models");
 const redisClient = require("./../../config/redis");
+const { intializeRedis } = require("./../../services/redis_init");
 
 const saveMessageInDatabase = async (objects) => {
   try {
@@ -68,6 +69,7 @@ async function destructureRedisData(objectStrings) {
 
   const isSave = await saveMessageInDatabase(objects);
   if (isSave) {
+    await intializeRedis();
     await redisClient.del(process.env.REDIS_KEY);
     return "message save in database";
   } else return "not saved";
